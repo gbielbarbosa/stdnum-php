@@ -1,0 +1,11 @@
+/vendor/
+
+# PHPUnit cache
+.phpunit.cache/
+.phpunit.result.cache
+/phpunit.xml
+/coverage/
+
+# IDE / OS files
+.idea/
+.vscode/
