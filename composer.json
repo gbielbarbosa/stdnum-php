@@ -1,12 +1,12 @@
 {
-    "name": "gbielbarboza/stdnum-php",
+    "name": "gbielbarbosa/stdnum-php",
     "description": "Library to parse, validate and format standard numbers and identifiers.",
     "version": "1.0.0",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Gabriel da Silva Barbosa",
+            "name": "Gabriel Barbosa",
             "email": "gabrielbarbosak1@gmail.com"
         }
     ],

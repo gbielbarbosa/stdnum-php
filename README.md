@@ -18,7 +18,7 @@ This project is an architectural port inspired by the robust `python-stdnum` lib
 You can install the package via composer:
 
 ```bash
-composer require gbielbarboza/stdnum-php
+composer require gbielbarbosa/stdnum-php
 ```
 
 ## Basic Usage
@@ -109,4 +109,4 @@ composer test
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
