@@ -1,26 +1,37 @@
 <?php
-
 namespace StdNum\Countries\PT;
 
 use StdNum\Contracts\DocumentInterface;
 use StdNum\Models\ValidationResult;
+use StdNum\Traits\Cleanable;
 
 class NIF implements DocumentInterface
 {
+    use Cleanable;
+
+    private function calcCheckDigit(string $number): string
+    {
+        $sum = 0;
+        for ($i = 0; $i < 8; $i++) {
+            $sum += (9 - $i) * (int)$number[$i];
+        }
+        return (string)((11 - $sum % 11) % 11 % 10);
+    }
+
     public function validate(string $number): ValidationResult
     {
-        $compact = $this->compact($number);
+        $cleaned = $this->compact($number);
 
-        if (strlen($compact) !== 9) {
-            return ValidationResult::failure('Invalid length for PT NIF.');
+        if (!ctype_digit($cleaned) || str_starts_with($cleaned, '0')) {
+            return ValidationResult::failure('Invalid format for NIF');
         }
 
-        if (!ctype_digit($compact) || $compact[0] === '0') {
-            return ValidationResult::failure('Invalid format or starting character for PT NIF.');
+        if (strlen($cleaned) !== 9) {
+            return ValidationResult::failure('Invalid length for NIF');
         }
 
-        if ($this->calcCheckDigit(substr($compact, 0, 8)) !== $compact[8]) {
-            return ValidationResult::failure('Invalid checksum for PT NIF.');
+        if ($this->calcCheckDigit(substr($cleaned, 0, -1)) !== $cleaned[8]) {
+            return ValidationResult::failure('Invalid checksum for NIF');
         }
 
         return ValidationResult::success();
@@ -33,36 +44,15 @@ class NIF implements DocumentInterface
 
     public function format(string $number): string
     {
-        $compact = $this->compact($number);
-        if (strlen($compact) !== 9) {
-            return $number;
-        }
-        return substr($compact, 0, 3) . ' ' . substr($compact, 3, 3) . ' ' . substr($compact, 6);
+        return $this->compact($number);
     }
 
     public function compact(string $number): string
     {
-        $compact = trim(strtoupper(str_replace([' ', '-', '.'], '', $number)));
-        if (str_starts_with($compact, 'PT')) {
-            $compact = substr($compact, 2);
+        $number = trim(strtoupper(str_replace([' ', '-', '.'], '', $number)));
+        if (str_starts_with($number, 'PT')) {
+            $number = substr($number, 2);
         }
-        return $compact;
-    }
-
-    protected function calcCheckDigit(string $base): string
-    {
-        $sum = 0;
-        for ($i = 0; $i < 8; $i++) {
-            $sum += (int)$base[$i] * (9 - $i);
-        }
-        
-        $modulo = $sum % 11;
-        $check = 11 - $modulo;
-        if ($check >= 10) {
-            $check = 0;
-        }
-
-        return (string)$check;
+        return $number;
     }
 }
-

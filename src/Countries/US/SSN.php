@@ -1,35 +1,34 @@
 <?php
-
 namespace StdNum\Countries\US;
 
 use StdNum\Contracts\DocumentInterface;
 use StdNum\Models\ValidationResult;
+use StdNum\Traits\Cleanable;
 
 class SSN implements DocumentInterface
 {
+    use Cleanable;
+
+    private array $blacklist = ['078-05-1120', '457-55-5462', '219-09-9999'];
+
     public function validate(string $number): ValidationResult
     {
-        $compact = $this->compact($number);
+        $raw = trim(str_replace(' ', '', $number));
 
-        if (strlen($compact) !== 9) {
-            return ValidationResult::failure('Invalid length for SSN.');
+        if (!preg_match('/^([0-9]{3})-?([0-9]{2})-?([0-9]{4})$/', $raw, $matches)) {
+            return ValidationResult::failure('Invalid format for SSN');
         }
 
-        if (!ctype_digit($compact)) {
-            return ValidationResult::failure('SSN must contain only digits.');
-        }
-
-        $area = substr($compact, 0, 3);
-        $group = substr($compact, 3, 2);
-        $serial = substr($compact, 5, 4);
+        $area = $matches[1];
+        $group = $matches[2];
+        $serial = $matches[3];
 
         if ($area === '000' || $area === '666' || $area[0] === '9' || $group === '00' || $serial === '0000') {
-            return ValidationResult::failure('Invalid SSN component. Area, group, or serial is invalid.');
+            return ValidationResult::failure('Invalid component for SSN');
         }
 
-        $blacklist = ['078051120', '457555462', '219099999'];
-        if (in_array($compact, $blacklist)) {
-            return ValidationResult::failure('Blacklisted SSN.');
+        if (in_array($this->format($number), $this->blacklist, true)) {
+            return ValidationResult::failure('Invalid component for SSN');
         }
 
         return ValidationResult::success();
@@ -42,17 +41,15 @@ class SSN implements DocumentInterface
 
     public function format(string $number): string
     {
-        $compact = $this->compact($number);
-        if (strlen($compact) !== 9) {
-            return $number;
+        $cleaned = $this->compact($number);
+        if (strlen($cleaned) === 9) {
+            return substr($cleaned, 0, 3) . '-' . substr($cleaned, 3, 2) . '-' . substr($cleaned, 5);
         }
-
-        return substr($compact, 0, 3) . '-' . substr($compact, 3, 2) . '-' . substr($compact, 5);
+        return $cleaned;
     }
 
     public function compact(string $number): string
     {
-        return trim(strtoupper(str_replace([' ', '-'], '', $number)));
+        return trim(str_replace('-', '', $number));
     }
 }
-

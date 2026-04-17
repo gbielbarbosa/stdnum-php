@@ -8,7 +8,7 @@ This project is an architectural port inspired by the robust `python-stdnum` lib
 
 ## Features
 
-- **Extensive Coverage**: Supports over 50 international identification formats spanning more than 24 countries.
+- **Extensive Coverage**: Supports 106 international identification formats spanning across 71 countries.
 - **Fluent & Static Resolution**: Simple dot-notation to dynamically map specific validators (e.g. `br.cpf`, `us.ssn`, `cn.uscc`).
 - **Laravel Integration Ready**: Includes a native generic rule `StdNumRule` that tightly integrates into Laravel's FormRequests and validators.
 - **Standardized Interfaces**: All validators rigorously adhere to a single `DocumentInterface` contract implementing `validate()`, `isValid()`, `format()`, and `compact()`.
@@ -89,15 +89,62 @@ Currently supported and rigorously tested identifier types include:
 * 🇨🇱 **Chile**: RUT
 * 🇨🇳 **China**: RIC, USCC
 * 🇨🇴 **Colombia**: NIT
-* 🇨🇷 **Costa Rica**: CPF, CPJ, CR (DIMEX)
-* 🇩🇪 **Germany**: VAT, STNR
-* 🇪🇸 **Spain**: DNI, NIE, CIF, NIF
+* 🇨🇷 **Costa Rica**: CPF, CPJ, CR
+* 🇨🇺 **Cuba**: NI
+* 🇨🇾 **Cyprus**: VAT
+* 🇨🇿 **Czech Republic**: DIC, RC
+* 🇩🇪 **Germany**: STNR, VAT
+* 🇩🇰 **Denmark**: CPR, CVR
+* 🇩🇴 **Dominican Republic**: CEDULA, RNC
+* 🇪🇨 **Ecuador**: CI, RUC
+* 🇪🇪 **Estonia**: IK, KMKR, REGISTRIKOOD
+* 🇪🇸 **Spain**: CIF, DNI, NIE, NIF
+* 🇫🇮 **Finland**: ALV, HETU, YTUNNUS
 * 🇫🇷 **France**: SIREN, SIRET, TVA
 * 🇬🇧 **United Kingdom**: NINO, UTR, VAT
-* 🇮🇹 **Italy**: Codice Fiscale, IVA
-* 🇳🇱 **Netherlands**: BSN, BTW
-* 🇵🇹 **Portugal**: NIF
-* 🇺🇸 **United States**: SSN, EIN
+* 🇬🇷 **Greece**: AMKA, VAT
+* 🇬🇹 **Guatemala**: NIT
+* 🇮🇩 **Indonesia**: NIK, NPWP
+* 🇮🇪 **Ireland**: PPS, VAT
+* 🇮🇱 **Israel**: HP, IDNR
+* 🇮🇳 **India**: AADHAAR, EPIC, PAN
+* 🇮🇸 **Iceland**: KENNITALA, VSK
+* 🇮🇹 **Italy**: CodiceFiscale, IVA
+* 🇯🇵 **Japan**: CN
+* 🇰🇷 **South Korea**: BRN, RRN
+* 🇱🇹 **Lithuania**: ASMENS, PVM
+* 🇱🇺 **Luxembourg**: TVA
+* 🇱🇻 **Latvia**: PVN
+* 🇲🇨 **Monaco**: TVA
+* 🇲🇩 **Moldova**: IDNO
+* 🇲🇪 **Montenegro**: PIB
+* 🇲🇰 **North Macedonia**: EDB
+* 🇲🇹 **Malta**: VAT
+* 🇲🇺 **Mauritius**: NID
+* 🇲🇽 **Mexico**: CURP, RFC
+* 🇲🇾 **Malaysia**: NRIC
+* 🇳🇱 **Netherlands**: BRIN, BSN, BTW, Identiteitskaartnummer, Onderwijsnummer, Postcode
+* 🇳🇴 **Norway**: Fodselsnummer, KontoNr, MVA, OrgNr
+* 🇳🇿 **New Zealand**: BankAccount, IRD
+* 🇵🇪 **Peru**: CUI, RUC
+* 🇵🇱 **Poland**: NIP, PESEL, REGON
+* 🇵🇹 **Portugal**: CC, NIF
+* 🇵🇾 **Paraguay**: RUC
+* 🇷🇴 **Romania**: CF, CNP, CUI, ONRC
+* 🇷🇸 **Serbia**: PIB
+* 🇷🇺 **Russia**: INN, OGRN
+* 🇸🇪 **Sweden**: Orgnr, Personnummer, VAT
+* 🇸🇬 **Singapore**: UEN
+* 🇸🇮 **Slovenia**: DDV, EMSO
+* 🇸🇰 **Slovakia**: DPH, RC
+* 🇸🇲 **San Marino**: COE
+* 🇸🇻 **El Salvador**: NIT
+* 🇹🇷 **Turkey**: TCKimlik, VKN
+* 🇺🇦 **Ukraine**: EDRPOU
+* 🇺🇸 **United States**: ATIN, EIN, ITIN, PTIN, RTN, SSN
+* 🇺🇾 **Uruguay**: RUT
+* 🇻🇪 **Venezuela**: RIF
+* 🇿🇦 **South Africa**: ID, TIN
 
 ## Testing
 

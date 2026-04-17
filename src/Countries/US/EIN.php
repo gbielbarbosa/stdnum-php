@@ -1,31 +1,20 @@
 <?php
-
 namespace StdNum\Countries\US;
 
 use StdNum\Contracts\DocumentInterface;
 use StdNum\Models\ValidationResult;
+use StdNum\Traits\Cleanable;
 
 class EIN implements DocumentInterface
 {
+    use Cleanable;
+
     public function validate(string $number): ValidationResult
     {
-        $compact = $this->compact($number);
+        $raw = trim(str_replace(' ', '', $number));
 
-        if (strlen($compact) !== 9) {
-            return ValidationResult::failure('Invalid length for EIN.');
-        }
-
-        if (!ctype_digit($compact)) {
-            return ValidationResult::failure('EIN must contain only digits.');
-        }
-
-        $prefix = substr($compact, 0, 2);
-        $invalidPrefixes = ['00', '07', '08', '09', '17', '18', '19', '28', '29', '49', '69', '70', '78', '79', '89', '96', '97', '98', '99'];
-        
-        // This is a simplified check based on typically unused ranges,
-        // python-stdnum has a specific white-list instead. We will flag invalid common prefixes.
-        if (in_array($prefix, $invalidPrefixes)) {
-            return ValidationResult::failure('Invalid EIN prefix.');
+        if (!preg_match('/^[0-9]{2}-?[0-9]{7}$/', $raw)) {
+            return ValidationResult::failure('Invalid format for EIN');
         }
 
         return ValidationResult::success();
@@ -38,17 +27,15 @@ class EIN implements DocumentInterface
 
     public function format(string $number): string
     {
-        $compact = $this->compact($number);
-        if (strlen($compact) !== 9) {
-            return $number;
+        $cleaned = $this->compact($number);
+        if (strlen($cleaned) === 9) {
+            return substr($cleaned, 0, 2) . '-' . substr($cleaned, 2);
         }
-
-        return substr($compact, 0, 2) . '-' . substr($compact, 2);
+        return $cleaned;
     }
 
     public function compact(string $number): string
     {
-        return trim(strtoupper(str_replace([' ', '-'], '', $number)));
+        return trim(str_replace('-', '', $number));
     }
 }
-

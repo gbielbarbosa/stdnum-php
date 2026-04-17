@@ -11,17 +11,21 @@ class RUT implements DocumentInterface
 
     private function calcCheckDigit(string $number): string
     {
+        $weights = [2, 3, 4, 5, 6, 7];
         $sum = 0;
         $rev = strrev($number);
         for ($i = 0; $i < strlen($rev); $i++) {
-            $w = (5 - $i) % 6;
-            if ($w < 0) {
-                $w += 6;
-            }
-            $sum += (int)$rev[$i] * (4 + $w);
+            $sum += (int)$rev[$i] * $weights[$i % 6];
         }
-        $map = '0123456789K';
-        return $map[$sum % 11];
+        $remainder = $sum % 11;
+        $check = 11 - $remainder;
+        if ($check === 11) {
+            return '0';
+        }
+        if ($check === 10) {
+            return 'K';
+        }
+        return (string)$check;
     }
 
     public function validate(string $number): ValidationResult

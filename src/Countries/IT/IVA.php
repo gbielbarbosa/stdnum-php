@@ -1,29 +1,58 @@
 <?php
-
 namespace StdNum\Countries\IT;
 
 use StdNum\Contracts\DocumentInterface;
 use StdNum\Models\ValidationResult;
-use StdNum\Traits\LuhnChecksum;
+use StdNum\Traits\Cleanable;
 
 class IVA implements DocumentInterface
 {
-    use LuhnChecksum;
+    use Cleanable;
+
+    private function luhnValidate(string $number): bool
+    {
+        $sum = 0;
+        $alt = false;
+        for ($i = strlen($number) - 1; $i >= 0; $i--) {
+            $n = (int)$number[$i];
+            if ($alt) {
+                $n *= 2;
+                if ($n > 9) {
+                    $n -= 9;
+                }
+            }
+            $sum += $n;
+            $alt = !$alt;
+        }
+        return ($sum % 10 === 0);
+    }
 
     public function validate(string $number): ValidationResult
     {
-        $compact = $this->compact($number);
+        $cleaned = $this->compact($number);
 
-        if (strlen($compact) !== 11) {
-            return ValidationResult::failure('Invalid length for IVA number.');
+        if (!ctype_digit($cleaned) || substr($cleaned, 0, 7) === '0000000') {
+            return ValidationResult::failure('Invalid format for IVA');
         }
 
-        if (!ctype_digit($compact)) {
-            return ValidationResult::failure('IVA must contain only digits.');
+        if (strlen($cleaned) !== 11) {
+            return ValidationResult::failure('Invalid length for IVA');
         }
 
-        if (!$this->verifyLuhn($compact)) {
-            return ValidationResult::failure('Invalid checksum for IVA number.');
+        $province = substr($cleaned, 7, 3);
+        $validProvince = false;
+        if ((int)$province >= 1 && (int)$province <= 100) {
+            $validProvince = true;
+        } elseif (in_array($province, ['120', '121', '888', '999'])) {
+            $validProvince = true;
+        }
+
+        if (!$validProvince) {
+            return ValidationResult::failure('Invalid component for IVA');
+        }
+
+        if (!$this->luhnValidate($cleaned)) {
+            return ValidationResult::failure('Invalid checksum for IVA');
         }
 
         return ValidationResult::success();
@@ -36,20 +65,15 @@ class IVA implements DocumentInterface
 
     public function format(string $number): string
     {
-        $compact = $this->compact($number);
-        if (strlen($compact) !== 11) {
-            return $number;
-        }
-        return $compact; // IVA does not typically have standard punctuation
+        return $this->compact($number);
     }
 
     public function compact(string $number): string
     {
-        $compact = trim(strtoupper(str_replace([' ', '-'], '', $number)));
-        if (str_starts_with($compact, 'IT')) {
-            $compact = substr($compact, 2);
+        $number = trim(strtoupper(str_replace([' ', '-', ':'], '', $number)));
+        if (str_starts_with($number, 'IT')) {
+            $number = substr($number, 2);
         }
-        return $compact;
+        return $number;
     }
 }
-
