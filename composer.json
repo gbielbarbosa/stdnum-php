@@ -1,7 +1,7 @@
 {
     "name": "gbielbarbosa/stdnum-php",
     "description": "A PHP library to parse, validate and format standard numbers and identifiers.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "type": "library",
     "license": "MIT",
     "authors": [
