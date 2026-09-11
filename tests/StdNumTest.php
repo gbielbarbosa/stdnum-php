@@ -81,6 +81,17 @@ class StdNumTest extends TestCase
         $this->assertFalse(StdNum::isValid('fr.tva', '84 323 140 391'));
 
         $this->assertTrue(StdNum::isValid('fr.siren', '303265045'));
+
+        // NIF (Numéro d'Immatriculation Fiscale)
+        $this->assertTrue(StdNum::isValid('fr.nif', '3023217600053'));
+        $this->assertFalse(StdNum::isValid('fr.nif', '3023217600054'));
+        $this->assertFalse(StdNum::isValid('fr.nif', '5023217600053')); // first digit must be 0-3
+
+        // NIR (Numéro de sécurité sociale)
+        $this->assertTrue(StdNum::isValid('fr.nir', '2 95 10 99 126 111 93'));
+        $this->assertTrue(StdNum::isValid('fr.nir', '253072B07300470'));
+        $this->assertTrue(StdNum::isValid('fr.nir', '253072A07300443'));
+        $this->assertFalse(StdNum::isValid('fr.nir', '253072B07300471'));
     }
 
     public function testCa()

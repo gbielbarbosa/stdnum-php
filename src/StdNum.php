@@ -27,6 +27,8 @@ class StdNum
         'fr.siren' => \StdNum\Countries\FR\SIREN::class,
         'fr.siret' => \StdNum\Countries\FR\SIRET::class,
         'fr.tva' => \StdNum\Countries\FR\TVA::class,
+        'fr.nif' => \StdNum\Countries\FR\NIF::class,
+        'fr.nir' => \StdNum\Countries\FR\NIR::class,
         'ca.sin' => \StdNum\Countries\CA\SIN::class,
         'ca.bn' => \StdNum\Countries\CA\BN::class,
         'pt.nif' => \StdNum\Countries\PT\NIF::class,
